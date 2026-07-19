@@ -1,0 +1,46 @@
+[
+  {
+    "filename": "Mutual-NDA.md",
+    "description": "Common Paper Mutual Non-Disclosure Agreement (MNDA) Standard Terms, allowing two parties to disclose confidential information to each other under mutual confidentiality obligations."
+  },
+  {
+    "filename": "CSA.md",
+    "description": "Common Paper Cloud Service Agreement (CSA) Standard Terms, governing a customer's subscription access to and use of a provider's cloud-based service."
+  },
+  {
+    "filename": "Design-Partner-Agreement.md",
+    "description": "Common Paper Design Partner Agreement Standard Terms, granting an early-access partner use of a product in exchange for feedback to help the provider develop and improve it."
+  },
+  {
+    "filename": "SLA.md",
+    "description": "Common Paper Service Level Agreement (SLA) Standard Terms, defining uptime and support response time targets, and the service credits or remedies available if those targets are missed."
+  },
+  {
+    "filename": "PSA.md",
+    "description": "Common Paper Professional Services Agreement (PSA) Standard Terms, governing the provision of professional services and deliverables under one or more statements of work."
+  },
+  {
+    "filename": "DPA.md",
+    "description": "Common Paper Data Processing Agreement (DPA) Standard Terms, governing the processing of personal data on a customer's behalf, including GDPR/UK GDPR international transfer mechanisms."
+  },
+  {
+    "filename": "Software-License-Agreement.md",
+    "description": "Common Paper Software License Agreement Standard Terms, granting a customer a license to install and use on-premises or client-side software."
+  },
+  {
+    "filename": "Partnership-Agreement.md",
+    "description": "Common Paper Partnership Agreement Standard Terms, governing a business partnership between two companies, including trademark licensing and shared obligations."
+  },
+  {
+    "filename": "Pilot-Agreement.md",
+    "description": "Common Paper Pilot Agreement Standard Terms, granting a prospective customer time-limited access to a product solely to evaluate it before entering a longer-term agreement."
+  },
+  {
+    "filename": "BAA.md",
+    "description": "Common Paper Business Associate Agreement (BAA) Standard Terms, governing a business associate's use and protection of protected health information (PHI) under HIPAA."
+  },
+  {
+    "filename": "AI-Addendum.md",
+    "description": "Common Paper AI Addendum Standard Terms, supplementing an underlying agreement to govern the use of AI/ML features, including Input/Output rights and model training restrictions."
+  }
+]
