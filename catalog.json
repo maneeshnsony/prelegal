@@ -26,5 +26,21 @@
   {
     "filename": "Software-License-Agreement.md",
     "description": "Common Paper Software License Agreement Standard Terms, granting a customer a license to install and use on-premises or client-side software."
+  },
+  {
+    "filename": "Partnership-Agreement.md",
+    "description": "Common Paper Partnership Agreement Standard Terms, governing a business partnership between two companies, including trademark licensing and shared obligations."
+  },
+  {
+    "filename": "Pilot-Agreement.md",
+    "description": "Common Paper Pilot Agreement Standard Terms, granting a prospective customer time-limited access to a product solely to evaluate it before entering a longer-term agreement."
+  },
+  {
+    "filename": "BAA.md",
+    "description": "Common Paper Business Associate Agreement (BAA) Standard Terms, governing a business associate's use and protection of protected health information (PHI) under HIPAA."
+  },
+  {
+    "filename": "AI-Addendum.md",
+    "description": "Common Paper AI Addendum Standard Terms, supplementing an underlying agreement to govern the use of AI/ML features, including Input/Output rights and model training restrictions."
   }
 ]
