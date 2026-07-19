@@ -1,0 +1,5 @@
+All legal agreement templates in this directory are Common Paper standard templates,
+sourced from CommonPaper's public GitHub repositories (https://github.com/CommonPaper).
+
+They are free to use under the Creative Commons Attribution 4.0 International License
+(CC BY 4.0): https://creativecommons.org/licenses/by/4.0/
