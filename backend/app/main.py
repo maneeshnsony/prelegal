@@ -29,6 +29,7 @@ frontend_dist_dir = Path(
 )
 
 if frontend_dist_dir.is_dir():
+    frontend_dist_dir = frontend_dist_dir.resolve()
 
     @app.get("/{full_path:path}")
     def serve_frontend(full_path: str) -> FileResponse:
@@ -41,7 +42,11 @@ if frontend_dist_dir.is_dir():
         ] if relative_path else [frontend_dist_dir / "index.html"]
 
         for candidate in candidates:
-            if candidate.is_file():
-                return FileResponse(candidate)
+            resolved = candidate.resolve()
+            if (
+                resolved.is_relative_to(frontend_dist_dir)
+                and resolved.is_file()
+            ):
+                return FileResponse(resolved)
 
         raise HTTPException(status_code=404)
