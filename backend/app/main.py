@@ -3,8 +3,8 @@ import subprocess
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 
 from app.db import ensure_database_exists
 
@@ -29,4 +29,19 @@ frontend_dist_dir = Path(
 )
 
 if frontend_dist_dir.is_dir():
-    app.mount("/", StaticFiles(directory=frontend_dist_dir, html=True), name="static")
+
+    @app.get("/{full_path:path}")
+    def serve_frontend(full_path: str) -> FileResponse:
+        relative_path = full_path.strip("/")
+
+        candidates = [
+            frontend_dist_dir / relative_path,
+            frontend_dist_dir / f"{relative_path}.html",
+            frontend_dist_dir / relative_path / "index.html",
+        ] if relative_path else [frontend_dist_dir / "index.html"]
+
+        for candidate in candidates:
+            if candidate.is_file():
+                return FileResponse(candidate)
+
+        raise HTTPException(status_code=404)
