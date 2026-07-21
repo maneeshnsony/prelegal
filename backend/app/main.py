@@ -1,6 +1,19 @@
+import subprocess
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 
-app = FastAPI(title="Prelegal API")
+from app.db import ensure_database_exists
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    ensure_database_exists()
+    subprocess.run(["alembic", "upgrade", "head"], cwd="backend", check=True)
+    yield
+
+
+app = FastAPI(title="Prelegal API", lifespan=lifespan)
 
 
 @app.get("/api/health")
