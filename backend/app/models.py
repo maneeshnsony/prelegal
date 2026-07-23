@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy import (
     Column,
     DateTime,
@@ -28,7 +30,7 @@ document_drafts = Table(
     "document_drafts",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("user_id", Integer, ForeignKey("users.id"), nullable=False, unique=True),
+    Column("user_id", Integer, ForeignKey("users.id"), nullable=False, index=True),
     Column("document_type", String(64), nullable=True),
     Column("fields", JSONB, nullable=False, server_default="{}"),
     Column("created_at", DateTime(timezone=True), server_default=func.now()),
@@ -68,7 +70,6 @@ class AuthResponse(BaseModel):
 
 
 class ChatRequest(BaseModel):
-    user_id: int
     message: str
 
 
@@ -79,9 +80,18 @@ class ChatResponse(BaseModel):
 
 
 class DraftResponse(BaseModel):
+    id: int
     document_type: str | None = None
     fields: dict[str, str] = {}
     messages: list[ChatMessage]
+
+
+class DraftSummary(BaseModel):
+    id: int
+    document_type: str | None
+    title: str
+    updated_at: datetime
+    is_complete: bool
 
 
 class RenderedField(BaseModel):
