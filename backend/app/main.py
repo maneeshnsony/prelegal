@@ -6,13 +6,13 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 
-from app.db import ensure_database_exists
+from app.db import reset_database
 from app.routers import auth, documents
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    ensure_database_exists()
+    reset_database()
     subprocess.run(["alembic", "upgrade", "head"], cwd="backend", check=True)
     yield
 
