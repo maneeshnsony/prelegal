@@ -51,13 +51,20 @@ class ChatMessage(BaseModel):
     content: str
 
 
+class SignupRequest(BaseModel):
+    email: str
+    password: str
+
+
 class LoginRequest(BaseModel):
     email: str
+    password: str
 
 
-class LoginResponse(BaseModel):
+class AuthResponse(BaseModel):
     user_id: int
     email: str
+    token: str
 
 
 class ChatRequest(BaseModel):
