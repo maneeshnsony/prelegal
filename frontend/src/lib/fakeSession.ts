@@ -1,10 +1,17 @@
-export const FAKE_SESSION_KEY = "prelegal_fake_session";
+export const USER_ID_KEY = "prelegal_user_id";
 
-export function hasFakeSession(): boolean {
-  if (typeof window === "undefined") return false;
-  return window.localStorage.getItem(FAKE_SESSION_KEY) === "true";
+export function getUserId(): number | null {
+  if (typeof window === "undefined") return null;
+  const raw = window.localStorage.getItem(USER_ID_KEY);
+  if (!raw) return null;
+  const id = Number(raw);
+  return Number.isFinite(id) ? id : null;
 }
 
-export function setFakeSession(): void {
-  window.localStorage.setItem(FAKE_SESSION_KEY, "true");
+export function setUserId(id: number): void {
+  window.localStorage.setItem(USER_ID_KEY, String(id));
+}
+
+export function clearSession(): void {
+  window.localStorage.removeItem(USER_ID_KEY);
 }
