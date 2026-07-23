@@ -7,7 +7,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 
 from app.db import ensure_database_exists
-from app.routers import auth, nda
+from app.routers import auth, documents
 
 
 @asynccontextmanager
@@ -19,7 +19,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Prelegal API", lifespan=lifespan)
 app.include_router(auth.router)
-app.include_router(nda.router)
+app.include_router(documents.router)
 
 
 @app.get("/api/health")
