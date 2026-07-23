@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy import (
     Column,
     DateTime,
@@ -9,6 +11,7 @@ from sqlalchemy import (
     Text,
     func,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 
 from pydantic import BaseModel
 
@@ -23,43 +26,26 @@ users = Table(
     Column("created_at", DateTime(timezone=True), server_default=func.now()),
 )
 
-nda_drafts = Table(
-    "nda_drafts",
+document_drafts = Table(
+    "document_drafts",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("user_id", Integer, ForeignKey("users.id"), nullable=False, unique=True),
-    Column("party_a_name", Text, nullable=True),
-    Column("party_b_name", Text, nullable=True),
-    Column("effective_date", Text, nullable=True),
-    Column("purpose", Text, nullable=True),
-    Column("mnda_term", Text, nullable=True),
-    Column("term_of_confidentiality", Text, nullable=True),
-    Column("governing_law", Text, nullable=True),
-    Column("jurisdiction", Text, nullable=True),
+    Column("user_id", Integer, ForeignKey("users.id"), nullable=False, index=True),
+    Column("document_type", String(64), nullable=True),
+    Column("fields", JSONB, nullable=False, server_default="{}"),
     Column("created_at", DateTime(timezone=True), server_default=func.now()),
     Column("updated_at", DateTime(timezone=True), server_default=func.now()),
 )
 
-nda_draft_messages = Table(
-    "nda_draft_messages",
+document_draft_messages = Table(
+    "document_draft_messages",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("draft_id", Integer, ForeignKey("nda_drafts.id"), nullable=False),
+    Column("draft_id", Integer, ForeignKey("document_drafts.id"), nullable=False),
     Column("role", String(20), nullable=False),
     Column("content", Text, nullable=False),
     Column("created_at", DateTime(timezone=True), server_default=func.now()),
 )
-
-
-class NdaFormData(BaseModel):
-    partyAName: str = ""
-    partyBName: str = ""
-    effectiveDate: str = ""
-    purpose: str = ""
-    mndaTerm: str = ""
-    termOfConfidentiality: str = ""
-    governingLaw: str = ""
-    jurisdiction: str = ""
 
 
 class ChatMessage(BaseModel):
@@ -67,25 +53,62 @@ class ChatMessage(BaseModel):
     content: str
 
 
+class SignupRequest(BaseModel):
+    email: str
+    password: str
+
+
 class LoginRequest(BaseModel):
     email: str
+    password: str
 
 
-class LoginResponse(BaseModel):
+class AuthResponse(BaseModel):
     user_id: int
     email: str
+    token: str
 
 
 class ChatRequest(BaseModel):
-    user_id: int
     message: str
 
 
 class ChatResponse(BaseModel):
     reply: str
-    fields: NdaFormData
+    document_type: str | None = None
+    fields: dict[str, str] = {}
 
 
 class DraftResponse(BaseModel):
-    fields: NdaFormData
+    id: int
+    document_type: str | None = None
+    fields: dict[str, str] = {}
     messages: list[ChatMessage]
+
+
+class DraftSummary(BaseModel):
+    id: int
+    document_type: str | None
+    title: str
+    updated_at: datetime
+    is_complete: bool
+
+
+class RenderedField(BaseModel):
+    field_id: str
+    label: str
+    value: str
+
+
+class RenderedParagraph(BaseModel):
+    number: int
+    title: str
+    body: str
+
+
+class RenderedDocument(BaseModel):
+    document_type: str
+    title: str
+    cover_fields: list[RenderedField]
+    paragraphs: list[RenderedParagraph]
+    disclaimer: str

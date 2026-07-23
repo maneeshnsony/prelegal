@@ -33,4 +33,13 @@ def ensure_database_exists() -> None:
     maintenance_engine.dispose()
 
 
+def reset_database() -> None:
+    target = os.environ["DB_DATABASE"]
+    maintenance_engine = get_engine("postgres")
+    with maintenance_engine.connect().execution_options(isolation_level="AUTOCOMMIT") as conn:
+        conn.execute(text(f'DROP DATABASE IF EXISTS "{target}"'))
+        conn.execute(text(f'CREATE DATABASE "{target}"'))
+    maintenance_engine.dispose()
+
+
 engine = get_engine()

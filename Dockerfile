@@ -16,5 +16,7 @@ COPY backend/ ./
 COPY --from=frontend-build /app/frontend/out /app/frontend/out
 ENV FRONTEND_DIST_DIR=/app/frontend/out
 WORKDIR /app
+COPY catalog.json ./catalog.json
+COPY templates/ ./templates/
 EXPOSE 8000
 CMD ["uv", "run", "--project", "backend", "uvicorn", "app.main:app", "--app-dir", "backend", "--host", "0.0.0.0", "--port", "8000"]

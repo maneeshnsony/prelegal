@@ -1,8 +1,8 @@
 import { Fragment } from "react";
-import { ATTRIBUTION, NdaFormData, getStandardTermsParagraphs } from "@/lib/ndaTemplate";
+import { RenderedDocument } from "@/lib/documentTypes";
 
-interface NdaDocumentProps {
-  data: NdaFormData;
+interface DocumentPreviewProps {
+  renderedDocument: RenderedDocument;
 }
 
 function renderInlineBold(text: string) {
@@ -21,28 +21,24 @@ function CoverField({ label, value }: { label: string; value: string }) {
   );
 }
 
-export default function NdaDocument({ data }: NdaDocumentProps) {
-  const paragraphs = getStandardTermsParagraphs(data);
-
+export default function DocumentPreview({ renderedDocument }: DocumentPreviewProps) {
   return (
-    <article id="nda-document" className="prose prose-sm max-w-none rounded-md border border-gray-200 bg-white p-6 text-gray-900">
-      <h1 className="text-xl font-bold text-gray-900">Mutual Non-Disclosure Agreement</h1>
+    <article
+      id="document-preview"
+      className="prose prose-sm max-w-none rounded-md border border-gray-200 bg-white p-6 text-gray-900"
+    >
+      <h1 className="text-xl font-bold text-gray-900">{renderedDocument.title}</h1>
 
       <h2 className="mt-4 text-base font-semibold text-gray-900">Cover Page</h2>
       <dl className="mb-6 grid grid-cols-2 gap-3 rounded-md bg-gray-50 p-4">
-        <CoverField label="Party A Name" value={data.partyAName} />
-        <CoverField label="Party B Name" value={data.partyBName} />
-        <CoverField label="Effective Date" value={data.effectiveDate} />
-        <CoverField label="Purpose" value={data.purpose} />
-        <CoverField label="MNDA Term" value={data.mndaTerm} />
-        <CoverField label="Term of Confidentiality" value={data.termOfConfidentiality} />
-        <CoverField label="Governing Law" value={data.governingLaw} />
-        <CoverField label="Jurisdiction" value={data.jurisdiction} />
+        {renderedDocument.cover_fields.map((field) => (
+          <CoverField key={field.field_id} label={field.label} value={field.value} />
+        ))}
       </dl>
 
       <h2 className="text-base font-semibold text-gray-900">Standard Terms</h2>
       <ol className="list-none space-y-3 pl-0">
-        {paragraphs.map((p, i) => (
+        {renderedDocument.paragraphs.map((p, i) => (
           <li key={i} className="text-sm leading-relaxed text-gray-800">
             {p.number ? (
               <>
@@ -58,7 +54,7 @@ export default function NdaDocument({ data }: NdaDocumentProps) {
         ))}
       </ol>
 
-      <p className="mt-6 text-xs text-gray-500">{ATTRIBUTION}</p>
+      <p className="mt-6 text-xs text-gray-500">{renderedDocument.disclaimer}</p>
     </article>
   );
 }
