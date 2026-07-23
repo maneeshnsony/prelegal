@@ -1,4 +1,4 @@
-import { NdaFormData } from "@/lib/ndaTemplate";
+import { RenderedDocument } from "@/lib/documentTypes";
 
 export interface ChatMessage {
   role: "user" | "assistant";
@@ -12,11 +12,13 @@ export interface LoginResponse {
 
 export interface ChatResponse {
   reply: string;
-  fields: NdaFormData;
+  document_type: string | null;
+  fields: Record<string, string>;
 }
 
 export interface DraftResponse {
-  fields: NdaFormData;
+  document_type: string | null;
+  fields: Record<string, string>;
   messages: ChatMessage[];
 }
 
@@ -37,18 +39,23 @@ export async function login(email: string): Promise<LoginResponse> {
 }
 
 export async function getDraft(userId: number): Promise<DraftResponse> {
-  const response = await fetch(`/api/nda/draft?user_id=${userId}`);
+  const response = await fetch(`/api/documents/draft?user_id=${userId}`);
   return parseOrThrow<DraftResponse>(response);
 }
 
-export async function sendChatMessage(
-  userId: number,
-  message: string
-): Promise<ChatResponse> {
-  const response = await fetch("/api/nda/chat", {
+export async function sendChatMessage(userId: number, message: string): Promise<ChatResponse> {
+  const response = await fetch("/api/documents/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ user_id: userId, message }),
   });
   return parseOrThrow<ChatResponse>(response);
+}
+
+export async function getRenderedDraft(userId: number): Promise<RenderedDocument> {
+  const response = await fetch(`/api/documents/draft/render?user_id=${userId}`);
+  if (response.status === 409) {
+    throw new Error("Document type not chosen yet");
+  }
+  return parseOrThrow<RenderedDocument>(response);
 }
