@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import NdaForm from "@/components/NdaForm";
 import NdaDocument from "@/components/NdaDocument";
 import { emptyNdaFormData, renderPlainTextDocument } from "@/lib/ndaTemplate";
 import { buildNdaPdf } from "@/lib/ndaPdf";
+import { hasFakeSession } from "@/lib/fakeSession";
 
 function fileNameFor(data: { partyAName: string; partyBName: string }, extension: string): string {
   const partyLabel =
@@ -14,6 +16,13 @@ function fileNameFor(data: { partyAName: string; partyBName: string }, extension
 
 export default function Home() {
   const [data, setData] = useState(emptyNdaFormData);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!hasFakeSession()) {
+      router.replace("/login");
+    }
+  }, [router]);
 
   function handleDownloadPdf() {
     const doc = buildNdaPdf(data);
