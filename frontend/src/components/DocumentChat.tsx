@@ -3,14 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import { ChatMessage } from "@/lib/api";
 
-interface NdaChatProps {
+interface DocumentChatProps {
   messages: ChatMessage[];
   onSend: (message: string) => Promise<void>;
   isLoading: boolean;
   error: string | null;
+  title: string;
 }
 
-export default function NdaChat({ messages, onSend, isLoading, error }: NdaChatProps) {
+export default function DocumentChat({ messages, onSend, isLoading, error, title }: DocumentChatProps) {
   const [input, setInput] = useState("");
   const listEndRef = useRef<HTMLDivElement>(null);
 
@@ -28,7 +29,7 @@ export default function NdaChat({ messages, onSend, isLoading, error }: NdaChatP
 
   return (
     <div className="flex h-full flex-col">
-      <h2 className="mb-3 text-lg font-semibold text-gray-900">Mutual NDA chat</h2>
+      <h2 className="mb-3 text-lg font-semibold text-gray-900">{title}</h2>
       <div className="flex-1 space-y-3 overflow-y-auto rounded-md border border-gray-200 bg-gray-50 p-3">
         {messages.map((message, index) => (
           <div
