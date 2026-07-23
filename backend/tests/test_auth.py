@@ -1,4 +1,5 @@
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 
 import pytest
 from fastapi.testclient import TestClient
@@ -88,3 +89,16 @@ def test_login_rejects_wrong_password(test_engine):
 def test_login_rejects_unknown_email(test_engine):
     response = client.post("/api/auth/login", json={"email": "nobody@example.com", "password": "x"})
     assert response.status_code == 401
+
+
+def test_concurrent_signup_same_email_never_returns_500(test_engine):
+    email = f"{uuid.uuid4().hex[:8]}@example.com"
+
+    def do_signup():
+        return client.post("/api/auth/signup", json={"email": email, "password": "hunter22"})
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        results = [f.result() for f in [executor.submit(do_signup), executor.submit(do_signup)]]
+
+    statuses = sorted(r.status_code for r in results)
+    assert statuses == [200, 409]
